@@ -8,14 +8,15 @@ type Props = {
 	colors : chartColors
 }
 
-export const ChartComponent = ({data , colors:{backgroundColor , textColor , lineColor , areaTopColor , areaBottomColor }}:Props) => {
+export const ChartComponent = ({data , colors:{backgroundColor , textColor , vertlines , horzlines }}:Props) => {
 
 	const chartContainerRef:any = useRef();
 
 	useEffect(
 		() => {
+
 			const handleResize = () => {
-				chart.applyOptions({ width: chartContainerRef.current.clientWidth });
+				chart.applyOptions({ width: chartContainerRef.current.clientWidth , height: chartContainerRef.current.clientHeight});
 			};
 
 			const chart = createChart(chartContainerRef.current, {
@@ -23,13 +24,15 @@ export const ChartComponent = ({data , colors:{backgroundColor , textColor , lin
 					background: { type: ColorType.Solid, color: backgroundColor },
 					textColor,
 				},
+				grid : {
+					vertLines:{color:vertlines},
+					horzLines:{color:horzlines}
+				},
 				width: chartContainerRef.current.clientWidth,
 				height: chartContainerRef.current.clientHeight,
 			});
-			chart.timeScale().fitContent();
 
-			const newSeries = chart.addAreaSeries({ lineColor, topColor: areaTopColor, bottomColor: areaBottomColor });
-			newSeries.setData(data);
+			chart.addCandlestickSeries().setData(data);
 
 			window.addEventListener('resize', handleResize);
 
@@ -38,8 +41,9 @@ export const ChartComponent = ({data , colors:{backgroundColor , textColor , lin
 
 				chart.remove();
 			};
+
 		},
-		[data, backgroundColor, lineColor, textColor, areaTopColor, areaBottomColor]
+		[data, backgroundColor, textColor,vertlines , horzlines]
 	);
 
 	return (

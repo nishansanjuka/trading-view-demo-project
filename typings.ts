@@ -1,12 +1,14 @@
 type ChartData = {
     time:string
-    value:number
+    open:number
+    high:number
+    low:number
+    close:number
 }
 
 type chartColors = {
     backgroundColor :string
-    lineColor:string
     textColor:string
-    areaTopColor:string
-    areaBottomColor:string
+    vertlines:string
+    horzlines:string
 }
