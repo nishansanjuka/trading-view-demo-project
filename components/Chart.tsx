@@ -12,6 +12,8 @@ export const ChartComponent = ({data , colors:{backgroundColor , textColor , lin
 
 	const chartContainerRef:any = useRef();
 
+	const currentDate = new Date(data[data.length - 1].time);
+
 	useEffect(
 		() => {
 			const handleResize = () => {
@@ -31,11 +33,21 @@ export const ChartComponent = ({data , colors:{backgroundColor , textColor , lin
 			const newSeries = chart.addAreaSeries({ lineColor, topColor: areaTopColor, bottomColor: areaBottomColor });
 			newSeries.setData(data);
 
+
+			const interval = setInterval(() => {
+				currentDate.setDate(currentDate.getDate() + 1);
+				const next = {
+					time: currentDate.toISOString().slice(0, 10),
+					value: 53 - 2 * Math.random(),
+				};
+				newSeries.update(next);
+			}, 1000);
+
 			window.addEventListener('resize', handleResize);
 
 			return () => {
 				window.removeEventListener('resize', handleResize);
-
+				clearInterval(interval);
 				chart.remove();
 			};
 		},
