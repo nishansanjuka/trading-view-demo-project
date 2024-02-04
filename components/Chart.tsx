@@ -32,6 +32,8 @@ export const ChartComponent = ({data , colors:{backgroundColor , textColor , ver
 				height: chartContainerRef.current.clientHeight,
 			});
 
+			chart.timeScale().fitContent();
+
 			chart.addCandlestickSeries().setData(data);
 
 			window.addEventListener('resize', handleResize);
